@@ -1,4 +1,4 @@
-package com.app.entity;
+package com.app.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,24 +9,24 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-@Table(name = "radno_vreme")
+@Table
 @Entity
-public class RadnoVreme {
+public class WorkTime {
 	
 	@Id
 	@Column
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column
-	private String pocetak;
+	private String start;
 	@Column
-	private String kraj;
+	private String end;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "vozac_id", referencedColumnName = "id")
-	private Vozac vozac;
+	@JoinColumn(name = "driver_id", referencedColumnName = "id")
+	private Driver driver;
 	
-	public RadnoVreme() {}
+	public WorkTime() {}
 
 	public int getId() {
 		return id;
@@ -36,28 +36,28 @@ public class RadnoVreme {
 		this.id = id;
 	}
 
-	public String getPocetak() {
-		return pocetak;
+	public String getStart() {
+		return start;
 	}
 
-	public void setPocetak(String pocetak) {
-		this.pocetak = pocetak;
+	public void setStart(String start) {
+		this.start = start;
 	}
 
-	public String getKraj() {
-		return kraj;
+	public String getEnd() {
+		return end;
 	}
 
-	public void setKraj(String kraj) {
-		this.kraj = kraj;
+	public void setEnd(String end) {
+		this.end = end;
 	}
 
-	public Vozac getVozac() {
-		return vozac;
+	public Driver getDriver() {
+		return driver;
 	}
 
-	public void setVozac(Vozac vozac) {
-		this.vozac = vozac;
+	public void setDriver(Driver driver) {
+		this.driver = driver;
 	}
 	
 	

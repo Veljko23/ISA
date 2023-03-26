@@ -1,5 +1,5 @@
 package com.app.enums;
 
-public enum TipPoruke {
+public enum MessageType {
 	SUPPORT, VOZNJA, PANIC
 }

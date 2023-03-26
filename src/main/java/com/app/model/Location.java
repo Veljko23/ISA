@@ -1,4 +1,4 @@
-package com.app.entity;
+package com.app.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,18 +8,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 @Table
 @Entity
-public class Lokacija {
+public class Location {
 	
 	@Id
 	@Column
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column
-	private double geoDuzina;
+	private double longitude;
 	@Column
-	private double geoSirina;
+	private double latitude;
 	
-	public Lokacija() {}
+	public Location() {}
 
 	public int getId() {
 		return id;
@@ -29,20 +29,20 @@ public class Lokacija {
 		this.id = id;
 	}
 
-	public double getGeoDuzina() {
-		return geoDuzina;
+	public double getLongitude() {
+		return longitude;
 	}
 
-	public void setGeoDuzina(double geoDuzina) {
-		this.geoDuzina = geoDuzina;
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
 	}
 
-	public double getGeoSirina() {
-		return geoSirina;
+	public double getLatitude() {
+		return latitude;
 	}
 
-	public void setGeoSirina(double geoSirina) {
-		this.geoSirina = geoSirina;
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
 	}
 
 	

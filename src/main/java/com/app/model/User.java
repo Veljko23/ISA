@@ -1,19 +1,27 @@
-package com.app.entity;
+package com.app.model;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import static javax.persistence.DiscriminatorType.STRING;
+import static javax.persistence.InheritanceType.SINGLE_TABLE;
 
 @Entity
+@Inheritance(strategy = SINGLE_TABLE)
 @Table
-public class Korisnik {
+@DiscriminatorColumn(name = "type", discriminatorType = STRING)
+public class User {
 	
 	@Id
-	@Column
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
+	@Column(name="id", unique=true, nullable=false)
 	private int id;
 	@Column
 	private String name;
@@ -32,7 +40,7 @@ public class Korisnik {
 	@Column
 	private boolean block;
 	
-	public Korisnik() {}
+	public User() {}
 
 	public int getId() {
 		return id;

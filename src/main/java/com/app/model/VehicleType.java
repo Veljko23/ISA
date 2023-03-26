@@ -1,4 +1,4 @@
-package com.app.entity;
+package com.app.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,20 +6,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-@Table(name = "tip_vozila")
+@Table
 @Entity
-public class TipVozila {
+public class VehicleType {
 	
 	@Id
 	@Column
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column
-	private String naziv;
+	private String name;
 	@Column
-	private double cena;
+	private double price;
 	
-	public TipVozila() {}
+	public VehicleType() {}
 
 
 	public int getId() {
@@ -30,20 +30,20 @@ public class TipVozila {
 		this.id = id;
 	}
 
-	public String getNaziv() {
-		return naziv;
+	public String getName() {
+		return name;
 	}
 
-	public void setNaziv(String naziv) {
-		this.naziv = naziv;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public double getCena() {
-		return cena;
+	public double getPrice() {
+		return price;
 	}
 
-	public void setCena(double cena) {
-		this.cena = cena;
+	public void setPrice(double price) {
+		this.price = price;
 	}
 	
 	

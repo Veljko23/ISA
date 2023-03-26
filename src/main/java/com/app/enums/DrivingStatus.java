@@ -1,5 +1,5 @@
 package com.app.enums;
 
-public enum StatusVoznje {
+public enum DrivingStatus {
 	PENDING, ACCEPTED, REJECTED, ACTIVE, FINISHED
 }
