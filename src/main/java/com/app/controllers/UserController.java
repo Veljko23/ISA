@@ -11,12 +11,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.dto.UserRequest;
 import com.app.model.User;
 import com.app.service.UserService;
 
 @RestController
+@RequestMapping(value = "api/users")
 public class UserController {
 
 	@Autowired
@@ -44,10 +47,10 @@ public class UserController {
 	}
 
 	@PostMapping(consumes = "application/json")
-	public ResponseEntity<User> saveUser(@RequestBody User user) {
+	public ResponseEntity<User> saveUser(@RequestBody UserRequest userRequest) {
 
 		
-		user = userService.save(user);
+		User user = userService.create(userRequest);
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 
