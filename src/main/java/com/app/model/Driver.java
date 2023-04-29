@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
-@DiscriminatorValue("V")
+@DiscriminatorValue("D")
 public class Driver extends User{
 	
 	
@@ -26,7 +26,7 @@ public class Driver extends User{
 	private Set<Driving> drivings = new HashSet<Driving>();
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "vehicle_id", referencedColumnName = "id")
+	@JoinColumn(name = "vehicle_id")
 	private Vehicle vehicle;
 
 	public Driver() {}

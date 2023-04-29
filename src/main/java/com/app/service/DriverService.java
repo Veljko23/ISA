@@ -30,4 +30,7 @@ public class DriverService {
 		driverRepository.deleteById(id);
 	}
 
+	public Driver getOneWithDrivings(Integer id) {
+		return driverRepository.getOneWithDrivings(id);
+	}
 }

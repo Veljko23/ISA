@@ -1,6 +1,6 @@
 package com.app.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,7 +38,7 @@ public class Payment {
 	private Set<Path> paths = new HashSet<Path>();
 	
 	@Column
-	private Date paymentTime;
+	private LocalDate paymentTime;
 	@Column
 	private double price;
 	
@@ -76,11 +76,11 @@ public class Payment {
 		this.paths = paths;
 	}
 
-	public Date getPaymentTime() {
+	public LocalDate getPaymentTime() {
 		return paymentTime;
 	}
 
-	public void setPaymentTime(Date paymentTime) {
+	public void setPaymentTime(LocalDate paymentTime) {
 		this.paymentTime = paymentTime;
 	}
 

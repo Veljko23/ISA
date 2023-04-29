@@ -1,7 +1,9 @@
 package com.app.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
 import com.app.enums.DrivingStatus;
 
 @Table
@@ -30,9 +33,9 @@ public class Driving {
 	private int id;
 
 	@Column
-	private Date start;
+	private LocalDate start;
 	@Column
-	private Date end;
+	private LocalDate end;
 	@Column
 	private int price;
 
@@ -45,7 +48,7 @@ public class Driving {
 	private Set<Passenger> passengers = new HashSet<Passenger>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Path> paths = new HashSet<Path>();
+	private List<Path> paths = new ArrayList<Path>();
 	@Column
 	private String estimatedTime;
 	@Column
@@ -69,19 +72,20 @@ public class Driving {
 		this.id = id;
 	}
 
-	public Date getStart() {
+
+	public LocalDate getStart() {
 		return start;
 	}
 
-	public void setStart(Date start) {
+	public void setStart(LocalDate start) {
 		this.start = start;
 	}
 
-	public Date getEnd() {
+	public LocalDate getEnd() {
 		return end;
 	}
 
-	public void setEnd(Date end) {
+	public void setEnd(LocalDate end) {
 		this.end = end;
 	}
 
@@ -109,11 +113,11 @@ public class Driving {
 		this.passengers = passengers;
 	}
 
-	public Set<Path> getPaths() {
+	public List<Path> getPaths() {
 		return paths;
 	}
 
-	public void setPaths(Set<Path> paths) {
+	public void setPaths(List<Path> paths) {
 		this.paths = paths;
 	}
 

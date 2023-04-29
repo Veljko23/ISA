@@ -1,5 +1,6 @@
 package com.app.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.dto.DriverDto;
+import com.app.dto.DriverWithDrivingsDto;
 import com.app.model.Driver;
 import com.app.service.DriverService;
 
@@ -25,12 +28,17 @@ public class DriverController {
 	private DriverService driverService;
 	
 	@GetMapping
-	public ResponseEntity<List<Driver>> getDrivers() {
+	public ResponseEntity<List<DriverDto>> getDrivers() {
 
 		List<Driver> drivers = driverService.findAll();
+		
+		List<DriverDto> driverdtos = new ArrayList<DriverDto>();
+		
+		for(Driver driver: drivers) {
+			driverdtos.add(new DriverDto(driver));
+		}
 
-
-		return new ResponseEntity<>(drivers, HttpStatus.OK);
+		return new ResponseEntity<>(driverdtos, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/{id}")
@@ -91,5 +99,17 @@ public class DriverController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	@GetMapping(value = "/withDrivings/{id}")
+	public ResponseEntity<DriverWithDrivingsDto> getDriverWithDrivings(@PathVariable Integer id) {
+
+		Driver driver = driverService.getOneWithDrivings(id);
+
+		if (driver == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		DriverWithDrivingsDto driverDtoWithDrivings = new DriverWithDrivingsDto(driver);
+		return new ResponseEntity<>(driverDtoWithDrivings, HttpStatus.OK);
 	}
 }
