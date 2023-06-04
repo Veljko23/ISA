@@ -37,32 +37,29 @@ public interface DrivingRepository extends JpaRepository<Driving, Integer>{
 	@Query("select d from Driving d join fetch d.driver dr where dr.id =?1")
 	public List<Driving> findAllForDriver(Integer driverId);
 	
-	@Query(value = "select d.* from Driving d, DRIVING_PASS dp where d.id = dp.driving_id and d.driver_id = ?1 order by d.price asc", nativeQuery = true)
-	public List<Driving> findAllForDriverOrderByPriceAsc(Integer passengerId);
+	@Query(value = "select d.* from Driving d, DRIVING_PASS dp where dp.driving_id = d.id and d.driver_id = ?1 order by d.price asc", nativeQuery = true)
+	public List<Driving> findAllForDriverOrderByPriceAsc(Integer driverId);
 	
-	@Query(value = "select d.* from Driving d, DRIVING_PASS dp where d.id = dp.driving_id and d.driver_id = ?1 order by d.price desc", nativeQuery = true)
-	public List<Driving> findAllForDriverOrderByPriceDesc(Integer passengerId);
+	@Query(value = "select d.* from Driving d where d.driver_id = ?1 order by d.price desc", nativeQuery = true)
+	public List<Driving> findAllForDriverOrderByPriceDesc(Integer driverId);
 	
-	@Query(value = "select d.* from Driving d, DRIVING_PASS dp where d.id = dp.driving_id and d.driver_id = ?1 order by d.start asc", nativeQuery = true)
-	public List<Driving> findAllForDriverOrderByStartAsc(Integer passengerId);
+	@Query(value = "select d.* from Driving d where d.driver_id = ?1 order by d.start asc", nativeQuery = true)
+	public List<Driving> findAllForDriverOrderByStartAsc(Integer driverId);
 	
-	@Query(value = "select d.* from Driving d, DRIVING_PASS dp where d.id = dp.driving_id and d.driver_id = ?1 order by d.start desc", nativeQuery = true)
-	public List<Driving> findAllForDriverOrderByStartDesc(Integer passengerId);
+	@Query(value = "select d.* from Driving d where d.driver_id = ?1 order by d.start desc", nativeQuery = true)
+	public List<Driving> findAllForDriverOrderByStartDesc(Integer driverId);
 	
-	@Query(value = "select d.* from Driving d, DRIVING_PASS dp where d.id = dp.driving_id and d.driver_id = ?1 order by d.end asc", nativeQuery = true)
-	public List<Driving> findAllForDriverOrderByEndAsc(Integer passengerId);
+	@Query(value = "select d.* from Driving d where d.driver_id = ?1 order by d.end asc", nativeQuery = true)
+	public List<Driving> findAllForDriverOrderByEndAsc(Integer driverId);
 	
-	@Query(value = "select d.* from Driving d, DRIVING_PASS dp where d.id = dp.driving_id and d.driver_id = ?1 order by d.end desc", nativeQuery = true)
-	public List<Driving> findAllForDriverOrderByEndDesc(Integer passengerId);
-	
-	@Query(value = "select d from Driving d join fetch d.driver dr where dr.id =?1 order by d.?2 ?3", nativeQuery = true)
-	public List<Driving> findAllForDriverOrderBy(Integer passengerId, String field, String order);
-	
+	@Query(value = "select d.* from Driving d where d.driver_id = ?1 order by d.end desc", nativeQuery = true)
+	public List<Driving> findAllForDriverOrderByEndDesc(Integer driverId);
+
 	
 	
 	@Query("select d from Driving d join fetch d.paths p where d.id =?1")
 	public Driving findOneWithPaths(Integer id);
 	
-	@Query("select d from Driving d join fetch d.paths p join fetch d.passengers where d.id =?1")
-	public Driving getOneWithPathsAndPassengers(int id);
+	@Query(value = "select d.* from Driving d, driving_pass dp, driving_paths paths where d.id =?1 and d.id = dp.driving_id and paths.driving_id = d.id", nativeQuery = true)
+	public Driving getOneWithPathsAndPassengers(Integer id);
 }

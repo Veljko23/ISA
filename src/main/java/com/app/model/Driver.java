@@ -29,8 +29,17 @@ public class Driver extends User{
 	@JoinColumn(name = "vehicle_id")
 	private Vehicle vehicle;
 
-	public Driver() {}
+	public Driver() {
+		super();
+	}
 
+	public Driver(String documents, boolean active, Set<Driving> drivings, Vehicle vehicle) {
+		super();
+		this.documents = documents;
+		this.active = active;
+		this.drivings = drivings;
+		this.vehicle = vehicle;
+	}
 
 	public String getDocuments() {
 		return documents;

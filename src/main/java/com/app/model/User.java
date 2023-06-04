@@ -1,5 +1,6 @@
 package com.app.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -32,7 +33,7 @@ import java.util.List;
 public class User implements UserDetails{
 	
 	@Id
-	@SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 3, allocationSize = 1)
+	@SequenceGenerator(name = "mySeqGenV2", sequenceName = "mySeqV2", initialValue = 30, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mySeqGenV2")
 	@Column(name="id", unique=true, nullable=false)
 	private int id;
@@ -53,7 +54,7 @@ public class User implements UserDetails{
 	@Column
 	private boolean block;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))

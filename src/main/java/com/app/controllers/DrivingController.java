@@ -142,6 +142,24 @@ public class DrivingController {
 		
 	}
 	
+	@PostMapping(value = "/usersDrivingHistory/{userId}")
+	public ResponseEntity<List<DrivingDto>> getUsersDrivingHistory(@RequestBody DrivingSortDto drivingSortDto, @PathVariable Integer userId) {
+		
+				
+		List<Driving> drivings = drivingService.getUsersDrivingHistory(userId, drivingSortDto);
+		if(drivings == null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST); 
+		}
+		
+		List<DrivingDto> drivingdtos = new ArrayList<DrivingDto>();
+		for(Driving driving : drivings) {
+			drivingdtos.add(new DrivingDto(driving));
+		}
+
+
+		return new ResponseEntity<>(drivingdtos, HttpStatus.OK); 
+	}
+	
 	@GetMapping(value = "/withPaths/{id}")
     public ResponseEntity<DrivingWithPathsDto> getOneWithDriverAndPaths(@PathVariable Integer id) {
 
@@ -156,7 +174,6 @@ public class DrivingController {
 	
 	@GetMapping(value = "/withPathsAndPassengers/{id}")
 	public ResponseEntity<DrivingWithPathsAndPassengersDto> getOneWithPathsAndPassengers(@PathVariable Integer id) {
-
 		Driving driving = drivingService.getOneDrivingWithPathsAndPassengers(id);
 
 		if (driving == null) {

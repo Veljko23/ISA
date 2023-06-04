@@ -36,7 +36,26 @@ public class Vehicle {
 	@JoinColumn(name = "location_id")
 	private Location currentLocation;
 	
-	public Vehicle() {}
+	public Vehicle() {
+		super();
+	}
+	
+	public Vehicle(String model) {
+		this.model = model;
+		
+	}
+
+	public Vehicle(int id, Driver driver, String model, VehicleType vehicleType, String tables, int seatsNumber,
+			Location currentLocation) {
+		super();
+		this.id = id;
+		this.driver = driver;
+		this.model = model;
+		this.vehicleType = vehicleType;
+		this.tables = tables;
+		this.seatsNumber = seatsNumber;
+		this.currentLocation = currentLocation;
+	}
 
 	public int getId() {
 		return id;

@@ -44,7 +44,7 @@ public class Driving {
 	private Driver driver;
 
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
-	@JoinTable(name = "drive_pass", joinColumns = @JoinColumn(name = "drive_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "pass_id", referencedColumnName = "id"))
+	@JoinTable(name = "driving_pass", joinColumns = @JoinColumn(name = "driving_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "pass_id", referencedColumnName = "id"))
 	private Set<Passenger> passengers = new HashSet<Passenger>();
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
