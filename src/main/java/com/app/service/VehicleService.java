@@ -19,7 +19,11 @@ public class VehicleService {
 	}
 	
 	public List<Vehicle> findAll(){
-		return vehicleRepository.findAll();
+		return vehicleRepository.findAllWithDrivers();
+	}
+	
+	public Vehicle findById(Integer id) {
+		return vehicleRepository.findById(id).get();
 	}
 	
 	public Vehicle save(Vehicle vehicle) {

@@ -11,6 +11,7 @@ public class DrivingDto {
 	private int id;
 	private LocalDate start;
 	private LocalDate end;
+	private DriverDto driver;
 	private int price;
 
 	private Location departure;
@@ -26,6 +27,9 @@ public class DrivingDto {
 		end = driving.getEnd();
 		price = driving.getPrice();
 		ArrayList<Path> paths = new ArrayList<Path>(driving.getPaths());
+		if(paths.size() == 0) {
+			return;
+		}
 		departure = paths.get(0).getDeparture();
 		destination = paths.get(paths.size() - 1).getDestination();
 		
@@ -79,6 +83,12 @@ public class DrivingDto {
 		this.destination = destination;
 	}
 
-	
+	public DriverDto getDriver() {
+		return driver;
+	}
+
+	public void setDriver(DriverDto driver) {
+		this.driver = driver;
+	}
 
 }

@@ -71,14 +71,15 @@ public class WebSecurityConfig {
 		http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
 		http.authorizeRequests().antMatchers("/auth/**").permitAll()
 				.antMatchers("/h2-console/**").permitAll()
-				//.antMatchers("/api/foo").permitAll() // /api/foo
+				.antMatchers("/api/users/register").permitAll() // /api/foo
+				.antMatchers("/api/vehicles/").permitAll()
+				.antMatchers("/api/users/logout").permitAll()
+				
 
 				.anyRequest().authenticated().and()
 				.cors().and()
 
-				// umetni custom filter TokenAuthenticationFilter kako bi se vrsila provera JWT
-				// tokena umesto cistih korisnickog imena i lozinke (koje radi
-				// BasicAuthenticationFilter)
+				
 				.addFilterBefore(new TokenAuthenticationFilter(tokenUtils, userDetailsService()),
 						BasicAuthenticationFilter.class);
 
@@ -91,9 +92,9 @@ public class WebSecurityConfig {
 	
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/auth/login")
+		return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/auth/login", "/api/users/register", "/api/users/reset-password", "/api/users/forgot-password", "/api/drivers/logout")
 				.antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico", "/**/*.html", "/**/*.css",
-						"/**/*.js");
+						"/**/*.js", "/api/vehicles");
 
 	}
 

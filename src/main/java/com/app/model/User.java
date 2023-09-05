@@ -38,10 +38,13 @@ public class User implements UserDetails{
 	@Column(name="id", unique=true, nullable=false)
 	private int id;
 	@Column
+
 	private String name;
 	@Column
+
 	private String surname;
 	@Column
+
 	private String picture;
 	@Column
 	private String number;

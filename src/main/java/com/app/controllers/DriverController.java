@@ -2,13 +2,14 @@ package com.app.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,9 +23,9 @@ import com.app.dto.DriverDto;
 import com.app.dto.DrivingStatisticDto;
 import com.app.dto.RequestStatisticsDto;
 import com.app.model.Driver;
-import com.app.model.Passenger;
 import com.app.model.User;
 import com.app.service.DriverService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping(value = "api/drivers")
@@ -58,36 +59,47 @@ public class DriverController {
 		}
 		
 	}
-
-	@PostMapping(consumes = "application/json")
-	public ResponseEntity<Driver> saveDriver(@RequestBody Driver driver) {
-
+	
+	/////////////////////////////////////////////////////
+	
+	@PostMapping(value = "/createDriver", consumes = "application/json")
+    public String createDriver(@RequestBody DriverDto driverDto){
 		
-		driver = driverService.save(driver);
-		return new ResponseEntity<>(driver, HttpStatus.CREATED);
-	}
+       
+		Driver driver = driverService.createDriver(driverDto);
+	       String message  = null;
+	       if(driver == null) {
+	           message = "unsuccesfull";
+	       }else {
+	           message = "succesfull";
+	       }
+	        return getJsonResponse("message", message);
+    }
+	
+	
+	private String getJsonResponse(String key, String value) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(Map.of(key, value));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{}";
+        }
+    }
+	
+	
+	////////////////////////////////////////////////////
 
+	
+	
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PutMapping(value = "/{id}", consumes = "application/json")
-	public ResponseEntity<Driver> updateDriver(@RequestBody Driver user, @PathVariable int id) {
+	public ResponseEntity<DriverDto> updateDriver(@RequestBody DriverDto driverDto, @PathVariable Integer id) {
 
-		try {
-			user.setId(user.getId());
-			user.setName(user.getName());
-			user.setSurname(user.getSurname());
-			user.setAddress(user.getAddress());
-			user.setEmail(user.getEmail());
-			user.setPassword(user.getPassword());
-			user.setBlock(user.isBlock());
-			user.setNumber(user.getNumber());
-			user.setPicture(user.getPicture());
-			user.setRoles(user.getRoles());
-			user.setDrivings(user.getDrivings());
-			user.setVehicle(user.getVehicle());
-			driverService.save(user);
-			return new ResponseEntity<Driver>(user, HttpStatus.OK);
-		} catch (NoSuchElementException  e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+		Driver updatedDriver = driverService.updateDriver(driverDto, id);
+
+		return new ResponseEntity<>(new DriverDto(updatedDriver), HttpStatus.OK);
+
 	}
 
 	@DeleteMapping(value = "/{id}")
@@ -103,24 +115,17 @@ public class DriverController {
 		}
 	}
 	
-//	@GetMapping(value = "/withDrivings/{id}")
-//	public ResponseEntity<DriverWithDrivingsDto> getDriverWithDrivings(@PathVariable Integer id) {
-//
-//		Driver driver = driverService.getOneWithDrivings(id);
-//
-//		if (driver == null) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//		DriverWithDrivingsDto driverDtoWithDrivings = new DriverWithDrivingsDto(driver);
-//		return new ResponseEntity<>(driverDtoWithDrivings, HttpStatus.OK);
-//	}
 	
 	@PostMapping(value = "/getStatistics")
 	public ResponseEntity<ArrayList<DrivingStatisticDto>> getStatistics(@RequestBody RequestStatisticsDto dto) {
 		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
-		ArrayList<DrivingStatisticDto> dtos = driverService.getDrivingStatisticsForDriverAndDateRange(loggedUser.getId(), dto.getStart(), dto.getEnd());
-
+		ArrayList<DrivingStatisticDto> dtos = new ArrayList<DrivingStatisticDto>();
+		if(loggedUser.getRoles().get(0).getName().equals("ROLE_DRIVER")) {
+			dtos = driverService.getDrivingStatisticsForDriverAndDateRange(loggedUser.getId(), dto.getStart(), dto.getEnd());
+		}
+		if(loggedUser.getRoles().get(0).getName().equals("ROLE_ADMIN")) {
+			dtos = driverService.getDrivingStatisticsForAllDriverAndDateRange(dto.getStart(), dto.getEnd());
+		}
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 
 	}
@@ -132,5 +137,41 @@ public class DriverController {
 
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 
+	}
+	
+	@GetMapping(value = "/logout")
+	public ResponseEntity<Void> driverInactive(){
+		
+		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(loggedUser == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		if(loggedUser instanceof Driver) {
+			((Driver) loggedUser).setActive(false);
+			driverService.save((Driver) loggedUser);
+		}
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	//////////////////////////////////////////////////////////
+	@GetMapping(value = "/status")
+	public ResponseEntity<String> driverStatus(){
+		
+		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(loggedUser == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		if(loggedUser instanceof Driver) {
+			((Driver) loggedUser).setActive(!((Driver) loggedUser).isActive());
+			driverService.save((Driver) loggedUser);
+			
+			 String status = ((Driver) loggedUser).isActive() ? "active" : "inactive";
+
+		     return ResponseEntity.ok("{\"status\":\"" + status + "\"}");
+		}
+
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

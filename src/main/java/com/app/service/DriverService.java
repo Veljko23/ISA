@@ -6,19 +6,33 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.app.dto.DriverDto;
 import com.app.dto.DrivingStatisticDto;
 import com.app.model.Driver;
 import com.app.model.Driving;
 import com.app.model.Path;
+import com.app.model.Role;
+import com.app.model.Vehicle;
 import com.app.repository.DriverRepository;
+import com.app.repository.VehicleRepository;
 
 @Service
 public class DriverService {
 	
 	@Autowired
 	private DriverRepository driverRepository;
+	
+	@Autowired
+	private VehicleRepository vehicleRepository;
+	
+	@Autowired
+	private RoleService roleService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	public Driver findOne(Integer id) {
 		return driverRepository.findById(id).get();
@@ -32,13 +46,53 @@ public class DriverService {
 		return driverRepository.save(driver);
 	}
 	
+	public Driver createDriver(DriverDto driverDto) {
+		Driver driver = driverDto.toDriver();
+		if (driver == null || driver.getEmail() == null || driver.getPassword() == null) {
+			return null;
+		}
+
+		if (isEmailRegistered(driver.getEmail())) {
+			return null;
+		}
+
+		driver.setPassword(passwordEncoder.encode(driver.getPassword()));
+		List<Role> roles = roleService.findByName("ROLE_DRIVER");
+		driver.setRoles(roles);
+		driver.setActive(false);
+		Vehicle vehicle = vehicleRepository.findById(driverDto.getVehicle()).get();
+		if(vehicle == null) {
+			return null;
+		}
+		driver.setVehicle(vehicle);
+		return driverRepository.save(driver);
+	}
+	
+	public Driver updateDriver(DriverDto driverDto, int id) {
+		Driver driver = findOne(id);
+
+		if (driver == null) {
+			return null;
+		}
+
+		driver.setId(driverDto.getId());
+		driver.setName(driverDto.getName());
+		driver.setSurname(driverDto.getSurname());
+		driver.setAddress(driverDto.getAddress());
+		driver.setEmail(driverDto.getEmail());
+		driver.setBlock(driverDto.isBlock());
+		driver.setNumber(driverDto.getNumber());
+		driver.setPicture(driverDto.getPicture());
+		driver.setDocuments(driverDto.getDocuments());
+		driver.setActive(driverDto.isActive());
+
+		return driverRepository.save(driver);
+	}
+	
 	public void remove(Integer id) {
 		driverRepository.deleteById(id);
 	}
 
-//	public Driver getOneWithDrivings(Integer id) {
-//		return driverRepository.getOneWithDrivings(id);
-//	}
 	
 	private void addPathToDtos(ArrayList<DrivingStatisticDto> dtos, Path path) {
 		for (DrivingStatisticDto dto : dtos) {
@@ -86,4 +140,10 @@ public class DriverService {
 		}
 		return dtos;
 	}
+	
+	public boolean isEmailRegistered(String email) {
+        // Ako postoji registrovan zadati mejl, vrati true, ako ne postoji, vrati false
+        Driver driver = driverRepository.findByEmail(email);
+        return driver != null;
+    }
 }

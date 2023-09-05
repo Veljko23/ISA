@@ -1,10 +1,6 @@
 package com.app.dto;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.app.model.Driver;
-import com.app.model.Driving;
 
 public class DriverDto {
 	
@@ -15,17 +11,16 @@ public class DriverDto {
 	private String number;
 	private String email;
 	private String address;
-	private String password;
 	private boolean block;
-	private Set<Driving> drivings;
 	private String documents;
+	private String password;	
 	private boolean active;
-	private String vehicle;
+	private int vehicle;
 	
 	public DriverDto() {}
 	
 	public DriverDto(int id, String name, String surname, String picture, String number, String email, String address,
-			String password, boolean block, String documents, boolean active, String vehicle) {
+			 boolean block, String documents, boolean active, int vehicle) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -34,7 +29,6 @@ public class DriverDto {
 		this.number = number;
 		this.email = email;
 		this.address = address;
-		this.password = password;
 		this.block = block;
 		this.documents = documents;
 		this.active = active;
@@ -49,11 +43,26 @@ public class DriverDto {
 		number = driver.getNumber();
 		email = driver.getEmail();
 		address = driver.getAddress();
-		password = driver.getPassword();
 		block = driver.isBlock();
 		documents = driver.getDocuments();
 		active = driver.isActive();
-		vehicle = driver.getVehicle().getModel();
+	}
+	
+	public Driver toDriver() {
+		Driver driver = new Driver();
+		driver.setId(id);
+		driver.setName(name);
+		driver.setSurname(surname);
+		driver.setPicture(picture);
+		driver.setNumber(number);
+		driver.setEmail(email);
+		driver.setAddress(address);
+		driver.setBlock(false);
+		driver.setDocuments(documents);
+		driver.setActive(false);
+		driver.setPassword(password);
+		
+		return driver;
 	}
 
 	public int getId() {
@@ -112,14 +121,6 @@ public class DriverDto {
 		this.address = address;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public boolean isBlock() {
 		return block;
 	}
@@ -128,13 +129,6 @@ public class DriverDto {
 		this.block = block;
 	}
 
-	public Set<Driving> getDrivings() {
-		return drivings;
-	}
-
-	public void setDrivings(Set<Driving> drivings) {
-		this.drivings = drivings;
-	}
 
 	public String getDocuments() {
 		return documents;
@@ -152,11 +146,19 @@ public class DriverDto {
 		this.active = active;
 	}
 
-	public String getVehicle() {
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public int getVehicle() {
 		return vehicle;
 	}
 
-	public void setVehicle(String vehicle) {
+	public void setVehicle(int vehicle) {
 		this.vehicle = vehicle;
 	}
 

@@ -103,7 +103,7 @@ public class DrivingController {
 		}
 	}
 	
-	@GetMapping(value = "/passengersDrivingHistory")
+	@PostMapping(value = "/passengersDrivingHistory")
 	public ResponseEntity<List<DrivingDto>> getPassengersDrivingHistory(@RequestBody DrivingSortDto drivingSortDto) {
 		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 				
@@ -123,7 +123,7 @@ public class DrivingController {
 
 	}
 	
-	@GetMapping(value = "/driversDrivingHistory")
+	@PostMapping(value = "/driversDrivingHistory")
 	public ResponseEntity<List<DrivingDto>> getDriversDrivingHistory(@RequestBody DrivingSortDto drivingSortDto) {
 		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 				
@@ -173,7 +173,7 @@ public class DrivingController {
     }
 	
 	@GetMapping(value = "/withPathsAndPassengers/{id}")
-	public ResponseEntity<DrivingWithPathsAndPassengersDto> getOneWithPathsAndPassengers(@PathVariable Integer id) {
+	public ResponseEntity<DrivingWithPathsAndPassengersDto> getOneWithPathsAndPassengers(@PathVariable("id") Integer id) {
 		Driving driving = drivingService.getOneDrivingWithPathsAndPassengers(id);
 
 		if (driving == null) {

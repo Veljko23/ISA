@@ -66,6 +66,7 @@ public class DrivingService {
 		return null;
 	}
 	
+	
 	public List<Driving> getDriversDrivingHistory(User loggedUser, DrivingSortDto drivingSortDto) {
 		if(drivingSortDto.getField().equals("price")) {
 			if(drivingSortDto.getOrder().equals("asc")) {

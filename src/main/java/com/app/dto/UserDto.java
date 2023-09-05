@@ -1,12 +1,9 @@
 package com.app.dto;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.app.model.User;
 
-import com.app.model.Driving;
-import com.app.model.Passenger;
-
-public class PassengerDto {
+public class UserDto {
+	
 	private int id;
 	private String name;
 	private String surname;
@@ -14,15 +11,13 @@ public class PassengerDto {
 	private String number;
 	private String email;
 	private String address;
+	private String role;
 	private boolean block;
-	private Set<Driving> drivings = new HashSet<Driving>();
-    
-	public PassengerDto() {
-		super();
-	}
-
-	public PassengerDto(int id, String name, String surname, String picture, String number, String email,
-			String address, boolean block) {
+	
+	public UserDto() {}
+	
+	public UserDto(int id, String name, String surname, String picture, String number, String email, String address,
+			boolean block) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -34,17 +29,16 @@ public class PassengerDto {
 		this.block = block;
 	}
 	
-
-	public PassengerDto(Passenger passenger) {
-		super();
-		id = passenger.getId();
-		name = passenger.getName();
-		surname = passenger.getSurname();
-		picture = passenger.getPicture();
-		number = passenger.getNumber();
-		email = passenger.getEmail();
-		address = passenger.getAddress();
-		block = passenger.isBlock();
+	public UserDto(User user) {
+		id = user.getId();
+		name = user.getName();
+		surname = user.getSurname();
+		picture = user.getPicture();
+		number = user.getNumber();
+		email = user.getEmail();
+		address = user.getAddress();
+		role = user.getRoles().get(0).getName().toString();
+		block = user.isBlock();
 	}
 
 	public int getId() {
@@ -103,6 +97,14 @@ public class PassengerDto {
 		this.address = address;
 	}
 
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	public boolean isBlock() {
 		return block;
 	}
@@ -110,14 +112,6 @@ public class PassengerDto {
 	public void setBlock(boolean block) {
 		this.block = block;
 	}
-
-	public Set<Driving> getDrivings() {
-		return drivings;
-	}
-
-	public void setDrivings(Set<Driving> drivings) {
-		this.drivings = drivings;
-	}
-
-    
+	
+	
 }

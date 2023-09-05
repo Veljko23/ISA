@@ -20,7 +20,9 @@ import com.app.dto.LoginDto;
 import com.app.dto.UserRequest;
 import com.app.dto.UserTokenState;
 import com.app.exception.ResourceConflictException;
+import com.app.model.Driver;
 import com.app.model.User;
+import com.app.service.DriverService;
 import com.app.service.UserService;
 import com.app.util.TokenUtils;
 
@@ -36,6 +38,9 @@ public class AuthenticationController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private DriverService driverService;
 
 	@PostMapping("/login")
 	public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody LoginDto loginDto,
@@ -49,10 +54,14 @@ public class AuthenticationController {
 		User user = (User) authentication.getPrincipal();
 		String jwt = tokenUtils.generateToken(user.getUsername());
 		int expiresIn = tokenUtils.getExpiredIn();
+		
+		if(user instanceof Driver) {
+			((Driver) user).setActive(true);
+			driverService.save((Driver) user);
+		}
 
 		return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
 	}
-
 
 	@PostMapping("/signup")
 	public ResponseEntity<User> addUser(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) {
@@ -66,4 +75,6 @@ public class AuthenticationController {
 
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
+	
+	
 }

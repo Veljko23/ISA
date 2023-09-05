@@ -15,6 +15,8 @@ public interface DriverRepository extends JpaRepository<Driver, Integer>{
 	@Query(value = "select d from Driver d join fetch d.drivings dr") //za admina
 	public Set<Driver> getAllWithDrivings();
 	
+	Driver findByEmail(String email);
+	
 //	@Query(value = "select u.* from USERS u, driving_pass dp, driving_paths dpths where u.id = dp.pass_id and dp.driving_id=dpths.driving_id", nativeQuery = true)
 //	public Set<Driver> getAllWithDrivings();
 }

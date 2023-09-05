@@ -34,10 +34,12 @@ public interface DrivingRepository extends JpaRepository<Driving, Integer>{
 	
 	
 	
+	
+	
 	@Query("select d from Driving d join fetch d.driver dr where dr.id =?1")
 	public List<Driving> findAllForDriver(Integer driverId);
 	
-	@Query(value = "select d.* from Driving d, DRIVING_PASS dp where dp.driving_id = d.id and d.driver_id = ?1 order by d.price asc", nativeQuery = true)
+	@Query(value = "select d.* from Driving d where d.driver_id = ?1 order by d.price asc", nativeQuery = true)
 	public List<Driving> findAllForDriverOrderByPriceAsc(Integer driverId);
 	
 	@Query(value = "select d.* from Driving d where d.driver_id = ?1 order by d.price desc", nativeQuery = true)

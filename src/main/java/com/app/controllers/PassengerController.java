@@ -123,12 +123,16 @@ public class PassengerController {
 	@PostMapping(value = "/getStatistics")
 	public ResponseEntity<ArrayList<DrivingStatisticDto>> getStatistics(@RequestBody RequestStatisticsDto dto) {
 		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
-		ArrayList<DrivingStatisticDto> dtos = passengerService
+		ArrayList<DrivingStatisticDto> dtos = new ArrayList<DrivingStatisticDto>();
+		if(loggedUser.getRoles().get(0).getName().equals("ROLE_PASSENGER")) {
+		dtos = passengerService
 				.getDrivingStatisticsForPassengerAndDateRange(loggedUser.getId(), dto.getStart(), dto.getEnd());
-
+		}
+		if(loggedUser.getRoles().get(0).getName().equals("ROLE_ADMIN")) {
+			dtos = passengerService
+					.getDrivingStatisticsForAllPassengerAndDateRange(dto.getStart(), dto.getEnd());
+			}
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
-
 	}
 	
 	@PostMapping(value = "/getAllStatistics")
